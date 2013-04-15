@@ -1,0 +1,56 @@
+import java.util.*;
+import java.io.*;
+
+public class matchTreeNode {
+    private String atomSym;
+    private int bondType;
+    private ArrayList<matchTreeNode> children;
+    private matchTreeNode parent;
+    
+    public matchTreeNode(String s, int i, matchTreeNode p) {
+	atomSym = s;
+	bondType = i;
+	parent = p;
+	children = new ArrayList<matchTreeNode>();
+    }
+
+    public matchTreeNode(String s, int i, matchTreeNode p, ArrayList<matchTreeNode> list) {
+	atomSym = s;
+	bondType = i;
+	parent = p;
+	children = list;
+    }
+
+    public String toString() {
+	return atomSym + bondType;
+    }
+
+    public String getAtom() {
+	return atomSym;
+    }
+
+    public int getBondType() {
+	return bondType;
+    }
+    
+    public matchTreeNode getParent() {
+	return parent;
+    }
+    
+    public void setParent(matchTreeNode p) {
+	parent = p;
+    }
+
+    public boolean isLeaf() {
+	if (children.size() == 0) 
+	    return true;
+	return false;
+    }
+
+    public boolean isRoot() {
+	if (parent == null)
+	    return true;
+	return false;
+    }
+
+}
