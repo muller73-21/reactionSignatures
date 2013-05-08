@@ -79,6 +79,13 @@ public class matchTreeNode {
     }
 
     /***
+	@param chldrn list of new children nodes
+     */
+    public void setChildren(ArrayList<matchTreeNode> chldrn) {
+	children = chldrn;
+    }
+    
+    /***
 	@return the tree node which is the parent of this current node
      */
     public matchTreeNode getParent() {
