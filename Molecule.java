@@ -16,6 +16,8 @@ public class Molecule {
     private int numOfMolecules;
     private HashMap<String, Integer> bondTypes = new HashMap<String, Integer>();
     private ArrayList<ArrayList<String>> matchTrees = new ArrayList<ArrayList<String>>();
+    private ArrayList<matchTreeNode> atomTrees = new ArrayList<matchTreeNode>();
+    
     /***
 	Constructs a new Molecule Object - molecule objects can hold information
 	about more than 1 molecule, given that all molecules were contained within
@@ -132,6 +134,14 @@ public class Molecule {
 	return atoms;
     }
     /***
+	Return list containing parent nodes of match trees
+	@return List of matchTreeNodes which are heads of atom Match trees
+     */
+    public ArrayList<matchTreeNode> getatomTrees() {
+	return atomTrees;
+    }
+
+    /***
 	Use connectivity trees to detect multiple molecules in mol file
 	@return number of molecules in mol file which created molecule object
      */
@@ -220,9 +230,11 @@ public class Molecule {
 		    buildChildren(grandchild);
 		}
 	    }
+	    
 	    int index = i + 1;
 	    String root = atom.toString();
 	    String path = "";
+	    atomTrees = parentNodes;
 	    //System.out.println(atom + " " + index );
 	    for (matchTreeNode child : atom.getChildren()) {
 		//System.out.print(child + ": ");

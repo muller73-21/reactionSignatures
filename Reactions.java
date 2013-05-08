@@ -273,7 +273,21 @@ public class Reactions {
 	ArrayList<Integer> m2PathsUsed = new ArrayList<Integer>();
 	ArrayList<Integer> m1PathsMapped = new ArrayList<Integer>();
 	HashMap<Integer, Integer> atomMap = new HashMap<Integer, Integer>();
-	for (int m1Index = 0; m1Index < m1atomTrees.size(); m1Index++) { // cycles through each atom in m1
+	ArrayList<matchTreeNode> m1parents = m1.getatomTrees();
+	ArrayList<matchTreeNode> m2parents = m2.getatomTrees();
+	for (int m1parIndex = 0; m1parIndex < m1parents.size(); m1parIndex++) {
+	    matchTreeNode m1curr = m1parents.get(m1parIndex);
+	    for (int m2parIndex = 0; m2parIndex < m2parents.size(); m2parIndex++) {
+		matchTreeNode m2curr = m2parents.get(m2parIndex);
+		if (m1curr.toString().equals(m2curr.toString())) {
+		    ArrayList<matchTreeNode> m1children1 = m1curr.getChildren();
+		    ArrayList<matchTreeNode> m2children1 = m2curr.getChildren():
+		} else {
+		    continue;
+		}
+	    }
+	}
+	/*for (int m1Index = 0; m1Index < m1atomTrees.size(); m1Index++) { // cycles through each atom in m1
 	    atomMap = new HashMap<Integer, Integer>();
 	    for (int m2Index = 0; m2Index < m2atomTrees.size(); m2Index ++) { // cycles through each atom in m2
 		if (!m2AtomsMapped.contains(m2Index + 1)) {
@@ -299,9 +313,27 @@ public class Reactions {
 		}		
 	    }
 	}
+	*/
 	System.out.println(mapping.keySet().size());
 	for (int m1atom : mapping.keySet()) {
 	    System.out.println("reactant atom " + m1atom + " maps to " + mapping.get(m1atom)+ " in the product");
 	}
+    }
+    
+    private boolean compareChildren(ArrayList<matchTreeNode> m1, ArrayList<matchTreeNode> m2) {
+	boolean match = false;
+	ArrayList<String> m1nodes = new ArrayList<String> ();
+	ArrayList<String> m2nodes = new ArrayList<String> ();
+	ArrayList<Integer> visited = new ArrayList<Integer>();
+	if (m1.size() != m2.size()) {
+	    return false;
+	}
+	for (matchTreeNode n : m1) {
+	    m1nodes.add(n.toString());
+	}
+	for (matchTreeNode n : m2) {
+	    m2nodes.add(n.toString());
+	}
+	
     }
 }
