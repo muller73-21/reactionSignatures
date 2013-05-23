@@ -302,13 +302,19 @@ public class Reactions {
 			m2curr.setChildren(m2children1);
 			//System.out.println("chgndNodes = " + chngdNodes);
 			matchTreeNode diff = null;
+			ArrayList<matchTreeNode> toBeRemoved = new ArrayList<matchTreeNode>();
 			for (matchTreeNode n : m1children1) {
 			    //System.out.println(n);
 			    if ( chngdNodes.contains(n.toString())) {
 				//System.out.println(n);
-				m1children1.remove(n);
+				//m1children1.remove(n);
+				toBeRemoved.add(n);
 				//System.out.println(m1children1);
 			    }
+			}
+		       
+			for (int remove = 0; remove < toBeRemoved.size();remove++) {
+			    m1children1.remove(toBeRemoved.get(remove));
 			}
 			m1curr.setChildren(m1children1);
 			//System.out.println(m1children1 + "; " + m2curr.getChildren());
@@ -318,7 +324,7 @@ public class Reactions {
 			} else {
 			    int index = m1parIndex + 1;
 			    int ind = m2parIndex + 1;
-			    System.out.println(m1curr.toString() +" " + index  +  ": "+ m1children1 + " "  + m2curr.toString() + " " + ind + ": " + m2children1 + " " + match);
+			    //System.out.println(m1curr.toString() +" " + index  +  ": "+ m1children1 + " "  + m2curr.toString() + " " + ind + ": " + m2children1 + " " + match);
 			    mapping.put(index, ind);
 			    m2visited.add(m2parIndex);
 			    break;
@@ -327,7 +333,7 @@ public class Reactions {
 		    } else {
 			int index = m1parIndex + 1;
 			int ind = m2parIndex + 1;
-			System.out.println(m1curr.toString() +" " + index +  ": "+ m1children1 + " "  + m2curr.toString() + " " + ind + ": " + m2children1 + " " + match);
+			//System.out.println(m1curr.toString() +" " + index +  ": "+ m1children1 + " "  + m2curr.toString() + " " + ind + ": " + m2children1 + " " + match);
 			mapping.put(index, ind);
 			m2visited.add(m2parIndex);
 			break;
