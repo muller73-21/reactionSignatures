@@ -181,18 +181,27 @@ public class Molecule {
 	    String atomB = atoms.get(Integer.parseInt(sc.next()) -1);
 	    int bondtype = Integer.parseInt(sc.next());
 	    String bond = "";
+	    String rbond = "";
 	    if (bondtype == 1) {
 		bond = bond + atomA + "-" + atomB;
+		rbond = rbond + atomB + "-" + atomA;
 	    } else if (bondtype == 2) {
 		bond = bond + atomA + "=" + atomB;
+		rbond = rbond + atomB + "=" + atomA;
 	    } else if (bondtype == 3) {
 		bond = bond + atomA + "t" + atomB;
+		rbond = rbond + atomB + "t" + atomA;
 	    }
 	    if (bondTypes.containsKey(bond)) {
 		int curFreq = bondTypes.get(bond);
 		curFreq++;
 		bondTypes.remove(bond);
 		bondTypes.put(bond, curFreq);
+	    } else if (bondTypes.containsKey(rbond)) {
+		int curFreq = bondTypes.get(rbond);
+		curFreq++;
+		bondTypes.remove(rbond);
+		bondTypes.put(rbond, curFreq);
 	    } else {
 		bondTypes.put(bond, 1);
 	    }

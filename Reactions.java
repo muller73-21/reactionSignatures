@@ -265,8 +265,6 @@ public class Reactions {
 	    }
 	}
 	System.out.println("Added nodes " + addedNodes);
-	ArrayList<ArrayList<String>> m1atomTrees = m1.getMatchTrees();
-	ArrayList<ArrayList<String>> m2atomTrees = m2.getMatchTrees();
 	ArrayList<Integer> m2AtomsMapped = new ArrayList<Integer>();
 	ArrayList<Integer> m2PathsUsed = new ArrayList<Integer>();
 	ArrayList<Integer> m1PathsMapped = new ArrayList<Integer>();
@@ -274,58 +272,42 @@ public class Reactions {
 	ArrayList<matchTreeNode> m1parents = m1.getatomTrees();
 	ArrayList<matchTreeNode> m2parents = m2.getatomTrees();
 	ArrayList<Integer> m2visited = new ArrayList<Integer>();
-	//System.out.println("m1: " + m1parents.get(5).getChildren());
-	//System.out.println("m2: " + m2parents.get(5).getChildren());
 	for (int m1parIndex = 0; m1parIndex < m1parents.size(); m1parIndex++) {
 	    matchTreeNode m1curr = m1parents.get(m1parIndex);
 	    for (int m2parIndex = 0; m2parIndex < m2parents.size(); m2parIndex++) {
 		matchTreeNode m2curr = m2parents.get(m2parIndex);
 		
-		if (m1curr.toString().equals(m2curr.toString()) && !m2visited.contains(m2parIndex)) {
-		    //System.out.println("on atom " + m1parIndex + ": " + m2parIndex);
+		if (m1curr.toString().equals(m2curr.toString()) && !m2visited.contains(m2parIndex)) {		    
 		    ArrayList<matchTreeNode> m1children1 = m1curr.getChildren();
-		    ArrayList<matchTreeNode> m2children1 = m2curr.getChildren();
-		    //System.out.println("m1: " + m1children1);
-		    //System.out.println("m2: " + m2children1);
+		    ArrayList<matchTreeNode> m2children1 = m2curr.getChildren();		   
 		    ArrayList<matchTreeNode> match = compareChildren(m1children1, m2children1);
-		    //System.out.println("Match " + m1parIndex + " size " + match.size());
 		    if (match.size() != 0) {  //match = differences in children (level 1)
-			
 			int changeMatch = 0;
 			for (matchTreeNode m : match) {
-			    //System.out.println(m + " " + addedNodes.contains(m.toString()));
 			    if (addedNodes.contains(m.toString())){ // checks if bond is made 				
 				changeMatch++;
 			    }
 			}
-			//System.out.println(changeMatch);
 			if (changeMatch == match.size()) {
 			    for (matchTreeNode m: match) {
 				m2children1.remove(m);
-				//System.out.println("removed something");
 			    }
 			}
 			m2curr.setChildren(m2children1);
-			//System.out.println("chgndNodes = " + chngdNodes);
 			matchTreeNode diff = null;
 			ArrayList<matchTreeNode> toBeRemoved = new ArrayList<matchTreeNode>();
 			for (matchTreeNode n : m1children1) {
-			    //System.out.println(n);
 			    if ( chngdNodes.contains(n.toString())) {
-				//System.out.println(n);
-				//m1children1.remove(n);
 				toBeRemoved.add(n);
-				//System.out.println(m1children1);
 			    }
-			}
-		       
+			}		       
 			for (int remove = 0; remove < toBeRemoved.size();remove++) {
 			    m1children1.remove(toBeRemoved.get(remove));
 			}
 			m1curr.setChildren(m1children1);
-			//System.out.println(m1children1 + "; " + m2curr.getChildren());
 			match = compareChildren(m1children1,m2curr.getChildren());
 			if (match.size() != 0 || m1children1.size() != m2children1.size()) {
+			    
 			    continue;
 			} else { //after removal of changed nodes
 			    boolean treematch = false;
@@ -516,9 +498,9 @@ public class Reactions {
 				m2visited.add(m2parIndex);
 				break;
 			    } else {
-				mapping.put(index, ind);
-			    	m2visited.add(m2parIndex);
-			    	break;
+				//mapping.put(index, ind);
+			    	//m2visited.add(m2parIndex);
+			    	//break;
 			    }
 			    
 			  
@@ -542,11 +524,13 @@ public class Reactions {
 					    }
 					}
 					matchTreeNode m2curr2 = m2children1.get(m2lvl2);
+					ArrayList<matchTreeNode> m2removed = new ArrayList<matchTreeNode>();
 					ArrayList<matchTreeNode> m2curr2children = m2curr2.getChildren();
 					//System.out.println(changeMatch);
 					if (changeMatch2 == lvl2results.size()) {
 					    for (matchTreeNode m: lvl2results) {
 						m2curr2children.remove(m);
+						m2removed.add(m);
 						//System.out.println("removed something");
 					    }
 					}
@@ -573,6 +557,14 @@ public class Reactions {
 					//System.out.println(m1children1 + "; " + m2curr.getChildren());
 					lvl2results = compareChildren(m1curr2.getChildren(),m2curr2.getChildren());
 					if (lvl2results.size() != 0 || m1curr2.getChildren().size() != m2curr2.getChildren().size()) {
+					    for (matchTreeNode m2removed2: m2removed) {
+						m2curr2children.add(m2removed2);
+					    }
+					    for (matchTreeNode m1removed : toBeRemoved2) {
+						m1curr2children.add(m1removed);
+					    }
+					    m1curr2.setChildren(m1curr2children);
+					    m2curr2.setChildren(m2curr2children);
 					    continue;
 					} else {
 					    	ArrayList<matchTreeNode> m1level3 = m1children1.get(lvl2).getChildren();
