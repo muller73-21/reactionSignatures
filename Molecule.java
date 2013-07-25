@@ -183,14 +183,14 @@ public class Molecule {
 	    String bond = "";
 	    String rbond = "";
 	    if (bondtype == 1) {
-		bond = bond + atomA + "-" + atomB;
-		rbond = rbond + atomB + "-" + atomA;
+		bond = bond + atomA + " - " + atomB;
+		rbond = rbond + atomB + " - " + atomA;
 	    } else if (bondtype == 2) {
-		bond = bond + atomA + "=" + atomB;
-		rbond = rbond + atomB + "=" + atomA;
+		bond = bond + atomA + " = " + atomB;
+		rbond = rbond + atomB + " = " + atomA;
 	    } else if (bondtype == 3) {
-		bond = bond + atomA + "t" + atomB;
-		rbond = rbond + atomB + "t" + atomA;
+		bond = bond + atomA + " t " + atomB;
+		rbond = rbond + atomB + " t " + atomA;
 	    }
 	    if (bondTypes.containsKey(bond)) {
 		int curFreq = bondTypes.get(bond);

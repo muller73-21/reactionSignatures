@@ -169,11 +169,13 @@ public class Reactionsv2 {
 	ArrayList<String> addedNodes = new ArrayList<String>();
 	for (String add : changedBonds.get("+")) {
 	    //System.out.println("+ " + add);
-	    String parentAtom = "" + add.charAt(0);
-	    String bondedAtom = "" + add.charAt(2);
-	    String bondtype = "" + add.charAt(1);
+	    Scanner bondsc = new Scanner(add);
+	    String parentAtom = bondsc.next();
+	    String bondtype = bondsc.next();
+	    String bondedAtom = bondsc.next();	   
 	    if (bondtype.equals("-")) {
 		addedNodes.add(bondedAtom + "1");
+		addedNodes.add(parentAtom + "1");
 	    } else if (bondtype.equals("=")) {
 		addedNodes.add(bondedAtom + "2");
 	    } else {
@@ -182,9 +184,10 @@ public class Reactionsv2 {
 	} // close add for loop
 	for (String lose : changedBonds.get("-")) {
 	    //System.out.println("- " + lose);
-	    String  parentAtom = "" + lose.charAt(0);
-	    String bondedAtom = "" + lose.charAt(2);
-	    String bondtype = "" + lose.charAt(1);
+	    Scanner bondsc = new Scanner(lose);
+	    String  parentAtom = bondsc.next();
+	    String bondtype = bondsc.next();
+	    String bondedAtom = bondsc.next();	    
 	    if (bondtype.equals("-")) {
 	        rmvedNodes.add(bondedAtom + "1");
 	    } else if (bondtype.equals("=")) {
@@ -212,7 +215,124 @@ public class Reactionsv2 {
 		    ArrayList<matchTreeNode> m2children1 = m2curr.getChildren();
 		    ArrayList<matchTreeNode> match = compareChildren(m1children1, m2children1);
 		    if (match.size() != 0) {
+			ArrayList<Integer> m2ChldrnMatched = new ArrayList<Integer>();
 			// insert removal comparisons
+			if (m1children1.size() < m2children1.size()) {
+			    ArrayList<Integer> m2lvl1matched = new ArrayList<Integer>();
+			    for (int m1test1 = 0; m1test1 < m1children1.size(); m1test1 ++) {
+				for (int m2test1 = 0; m2test1 < m2children1.size(); m2test1 ++) {
+				    matchTreeNode m1lvl1curr = m1children1.get(m1test1);
+				    matchTreeNode m2lvl1curr = m2children1.get(m2test1);
+				    if (m1lvl1curr.toString().equals(m2lvl1curr.toString()) && !m2lvl1matched.contains(m2test1)) {
+					ArrayList<matchTreeNode> m1lvl1children = m1lvl1curr.getChildren();
+					ArrayList<matchTreeNode> m2lvl1children = m2lvl1curr.getChildren();
+					ArrayList<matchTreeNode> lvl1chldresults = compareChildren(m1lvl1children, m2lvl1children);
+					if (lvl1chldresults.size() == 0) {
+					    ArrayList<Integer> m2lvl2matched = new ArrayList<Integer>();
+					    for (int m1test2 = 0; m1test2 < m1lvl1children.size(); m1test2 ++) {
+						for (int m2test2 = 0; m2test2 < m2lvl1children.size(); m2test2 ++) {
+						    matchTreeNode m1lvl2curr = m1lvl1children.get(m1test2);
+						    matchTreeNode m2lvl2curr = m2lvl1children.get(m2test2);
+						    if (m1lvl2curr.toString().equals(m2lvl2curr.toString()) && !m2lvl2matched.contains(m2test2)) {
+							ArrayList<matchTreeNode> m1lvl2children = m1lvl2curr.getChildren();
+							ArrayList<matchTreeNode> m2lvl2children = m2lvl2curr.getChildren();
+							ArrayList<matchTreeNode> lvl1gchldresults = compareChildren(m1lvl2children, m2lvl2children);
+							if (lvl1gchldresults.size() == 0) {
+							    m2lvl2matched.add(m2test2);
+							} 
+						    } 
+						    if (m2lvl2matched.size() == m2lvl1children.size()) {
+							m2lvl1matched.add(m2test1);
+							break;
+						    }
+						}						
+					    }
+					}
+				    }
+				}				
+			    } // found children to be removed
+			    for (int m2scan = 0; m2scan < m2children1.size(); m2scan ++) {
+				if (!m2lvl1matched.contains(m2scan)) {
+				    matchTreeNode temp = m2children1.get(m2scan);
+				    System.out.println(m1parIndex + " " + temp);
+				    if (addedNodes.contains(temp.toString()) && temp.tested == false) {
+					System.out.println("temp in added nodes " + m1children1 + " " + m2children1);
+					m2children1.remove(m2scan);
+					System.out.println(m1parIndex + " " + m2parIndex + " removed " + temp + " from m2children1 " + m2children1);
+					ArrayList<matchTreeNode> lvl1retest = compareChildren(m1children1, m2children1);
+					System.out.println(lvl1retest);
+					if (lvl1retest.size() == 0) {
+					    m2ChldrnMatched.add(m2scan);
+					    break;
+					} else {
+					    temp.tested = true;
+					    m2children1.add(temp);
+					    m2ChldrnMatched.add(m2scan);
+					    m2scan --;
+					    System.out.println("fixed " + m2children1);
+					}
+				    }
+				}
+			    }
+			} else if (m1children1.size() > m2children1.size()) {
+			    ArrayList<Integer> m2lvl1matched = new ArrayList<Integer>();
+			    ArrayList<Integer> m1lvl1matched = new ArrayList<Integer>();
+			    for (int m1test1 = 0; m1test1 < m1children1.size(); m1test1 ++) {
+				for (int m2test1 = 0; m2test1 < m2children1.size(); m2test1 ++) {
+				    matchTreeNode m1lvl1curr = m1children1.get(m1test1);
+				    matchTreeNode m2lvl1curr = m2children1.get(m2test1);
+				    if (m1lvl1curr.toString().equals(m2lvl1curr.toString()) && !m2lvl1matched.contains(m2test1)) {
+					ArrayList<matchTreeNode> m1lvl1children = m1lvl1curr.getChildren();
+					ArrayList<matchTreeNode> m2lvl1children = m2lvl1curr.getChildren();
+					ArrayList<matchTreeNode> lvl1chldresults = compareChildren(m1lvl1children, m2lvl1children);
+					if (lvl1chldresults.size() == 0) {
+					    ArrayList<Integer> m2lvl2matched = new ArrayList<Integer>();
+					    for (int m1test2 = 0; m1test2 < m1lvl1children.size(); m1test2 ++) {
+						for (int m2test2 = 0; m2test2 < m2lvl1children.size(); m2test2 ++) {
+						    matchTreeNode m1lvl2curr = m1lvl1children.get(m1test2);
+						    matchTreeNode m2lvl2curr = m2lvl1children.get(m2test2);
+						    if (m1lvl2curr.toString().equals(m2lvl2curr.toString()) && !m2lvl2matched.contains(m2test2)) {
+							ArrayList<matchTreeNode> m1lvl2children = m1lvl2curr.getChildren();
+							ArrayList<matchTreeNode> m2lvl2children = m2lvl2curr.getChildren();
+							ArrayList<matchTreeNode> lvl1gchldresults = compareChildren(m1lvl2children, m2lvl2children);
+							if (lvl1gchldresults.size() == 0) {
+							    m2lvl2matched.add(m2test2);
+							} else if (m2lvl2matched.size() == m2lvl2children.size()) {
+							    m2lvl1matched.add(m2test1);
+							    m1lvl1matched.add(m1test1);
+							    break;
+							}
+						    }
+						}
+					    }
+					}
+				    }
+				}				
+			    } // found children to be removed
+			    for (int m1scan = 0; m1scan < m1children1.size(); m1scan ++) {
+				if (!m1lvl1matched.contains(m1scan)) {
+				    matchTreeNode temp = m1children1.get(m1scan);
+				    if (rmvedNodes.contains(temp)) {
+					m1children1.remove(m1scan);
+					ArrayList<matchTreeNode> lvl1retest = compareChildren(m1children1, m2children1);
+					if (lvl1retest.size() == 0) {
+					    m2ChldrnMatched.add(m1scan);
+					} else {
+					    m1children1.add(temp);
+					}
+				    }
+				}
+			    }
+			}
+			System.out.println(m1parIndex + " " + m2parIndex + " " + m2ChldrnMatched.size() + " " + m2children1.size());
+			if (m2ChldrnMatched.size() == m2children1.size()) {
+			    System.out.println("match!!!");
+			    int index = m1parIndex + 1;
+			    int ind = m2parIndex + 1;
+			    mapping.put(index, ind);
+			    m2visited.add(m2parIndex);
+			    break;
+			}
 			
 		    } else {
 			int index = m1parIndex + 1;
@@ -225,7 +345,73 @@ public class Reactionsv2 {
 				    ArrayList<matchTreeNode> lvl2results = compareChildren(m1children1.get(lvl2).getChildren(), m2children1.get(m2lvl2).getChildren());
 				    if (lvl2results.size() != 0) {
 					// compare with removal tests
-					
+					ArrayList<matchTreeNode> m1level2 = m1children1.get(lvl2).getChildren();
+					ArrayList<matchTreeNode> m2level2 = m2children1.get(m2lvl2).getChildren();
+					if (m1level2.size() < m2level2.size()) {
+					    ArrayList<Integer> m2lvl2matched = new ArrayList<Integer>();
+					    for (int m1test2 = 0; m1test2 < m1level2.size(); m1test2++) {
+						for (int m2test2 = 0; m2test2 < m2level2.size(); m2test2++) {
+						    matchTreeNode m1lvl2curr = m1level2.get(m1test2);
+						    matchTreeNode m2lvl2curr = m2level2.get(m2test2);
+						    if (m1lvl2curr.toString().equals(m2lvl2curr.toString()) && !m2lvl2matched.contains(m2test2)) {
+							ArrayList<matchTreeNode> m1lvl2currChildren = m1lvl2curr.getChildren();
+							ArrayList<matchTreeNode> m2lvl2currChildren = m2lvl2curr.getChildren();
+							ArrayList<matchTreeNode> lvl2chldresults = compareChildren(m1lvl2currChildren, m2lvl2currChildren);
+							if (lvl2chldresults.size() == 0) {
+							    m2lvl2matched.add(m2test2);
+							    break;
+							}
+						    }
+						}
+					    } // found children to remove
+					    for (int m2scan = 0; m2scan < m2level2.size(); m2scan++) {
+						if (!m2lvl2matched.contains(m2scan)) {
+						    matchTreeNode temp = m2level2.get(m2scan);
+						    if (addedNodes.contains(temp)) {
+							m2level2.remove(m2scan);
+							ArrayList<matchTreeNode> lvl2restest = compareChildren(m1level2, m2level2);
+							if (lvl2restest.size() == 0) {
+							    m2childrenmatched.add(m2lvl2);
+							} else {
+							    m2level2.add(temp);
+							}
+						    }
+						}
+					    } // tried removing children
+					} else if (m1level2.size() > m2level2.size()) {
+					    ArrayList<Integer> m1lvl2matched = new ArrayList<Integer>();
+					    ArrayList<Integer> m2lvl2matched = new ArrayList<Integer>();
+					    for (int m1test2 = 0; m1test2 < m1level2.size(); m1test2++) {
+						for (int m2test2 = 0; m2test2 < m2level2.size(); m2test2++) {
+						    matchTreeNode m1lvl2curr = m1level2.get(m1test2);
+						    matchTreeNode m2lvl2curr = m2level2.get(m2test2);
+						    if (m1lvl2curr.toString().equals(m2lvl2curr.toString()) && !m2lvl2matched.contains(m2test2)) {
+							ArrayList<matchTreeNode> m1lvl2currChildren = m1lvl2curr.getChildren();
+							ArrayList<matchTreeNode> m2lvl2currChildren = m2lvl2curr.getChildren();
+							ArrayList<matchTreeNode> lvl2chldresults = compareChildren(m1lvl2currChildren, m2lvl2currChildren);
+							if (lvl2chldresults.size() == 0) {
+							    m2lvl2matched.add(m2test2);
+							    m1lvl2matched.add(m1test2);
+							    break;
+							}
+						    }
+						}
+					    } // found children to remove
+					    for (int m1scan = 0; m1scan < m1level2.size(); m1scan++) {
+						if (!m1lvl2matched.contains(m1scan)) {
+						    matchTreeNode temp = m1level2.get(m1scan);
+						    if (rmvedNodes.contains(temp)) {
+							m1level2.remove(m1scan);
+							ArrayList<matchTreeNode> lvl2retest = compareChildren(m1level2, m2level2);
+							if (lvl2retest.size() == 0) {
+							    m2childrenmatched.add(m2lvl2);
+							} else {
+							    m1level2.add(temp);
+							}
+						    }
+						}
+					    }
+					} // tried removing children
 				    } else if (lvl2results.size() == 0) {
 					ArrayList<matchTreeNode> m1level3 = m1children1.get(lvl2).getChildren();
 					ArrayList<matchTreeNode> m2level3 = m2children1.get(m2lvl2).getChildren();
@@ -234,7 +420,61 @@ public class Reactionsv2 {
 					    m2childrenmatched.add(m2lvl2);
 					} else if (lvl3results.size() != 0) {
 					    // compare with removal test
-					
+					    if (m1level3.size() < m2level3.size()) {
+						ArrayList<Integer> m2lvl3matched = new ArrayList<Integer>();
+						for (int lvl3 = 0; lvl3 < m1level3.size(); lvl3++) {
+						    for (int m2lvl3 = 0; m2lvl3 < m2level3.size(); m2lvl3++) {
+							matchTreeNode m1lvl3curr = m1level3.get(lvl3);
+							matchTreeNode m2lvl3curr = m2level3.get(m2lvl3);
+							if (m1lvl3curr.toString().equals(m2lvl3curr.toString()) && !m2lvl3matched.contains(m2lvl3)) {
+							    m2lvl3matched.add(m2lvl3);
+							    break;
+							}
+						    }
+						}
+						for (int m2test = 0; m2test < m2level3.size(); m2test++) {
+						    if (!m2lvl3matched.contains(m2test)) {
+							matchTreeNode temp = m2level3.get(m2test);
+							if (addedNodes.contains(temp)) {
+							    m2level3.remove(m2test);
+							    ArrayList<matchTreeNode> lvl3retest = compareChildren(m1level3, m2level3);
+							    if (lvl3retest.size() == 0) {
+								m2childrenmatched.add(m2lvl2);
+							    } else {
+								m2level3.add(temp);
+							    }
+							}
+						    }
+						}
+					    } else if (m1level3.size() > m2level3.size()) {
+						ArrayList<Integer> m1lvl3matched = new ArrayList<Integer>();
+						ArrayList<Integer> m2lvl3matched = new ArrayList<Integer>();
+						for (int lvl3 = 0; lvl3 < m1level3.size(); lvl3++) {
+						    for (int m2lvl3 = 0; m2lvl3 < m2level3.size(); m2lvl3++) {
+							matchTreeNode m1lvl3curr = m1level3.get(lvl3);
+							matchTreeNode m2lvl3curr = m2level3.get(m2lvl3);
+							if (m1lvl3curr.toString().equals(m2lvl3curr.toString()) && !m2lvl3matched.contains(m2lvl3)) {
+							    m1lvl3matched.add(lvl3);
+							    m2lvl3matched.add(m2lvl3);
+							    break;
+							}
+						    }
+						}
+						for (int m1test = 0; m1test < m1level3.size(); m1test++) {
+						    if (!m1lvl3matched.contains(m1test)) {
+							matchTreeNode temp = m1level3.get(m1test);
+							if (rmvedNodes.contains(temp)) {
+							    m1level3.remove(m1test);
+							    ArrayList<matchTreeNode> lvl3retest = compareChildren(m1level3, m2level3);
+							    if (lvl3retest.size() == 0) {
+								m2childrenmatched.add(m2lvl2);
+							    } else {
+								m1level3.add(temp);
+							    }
+							}
+						    }
+						}
+					    }
 					}
 				    } else if (m2childrenmatched.size() == m2children1.size()) {
 					treematch = true;

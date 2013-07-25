@@ -11,6 +11,7 @@ public class matchTreeNode {
     private ArrayList<matchTreeNode> children;
     private matchTreeNode parent;
     private int atomNumber;
+    public boolean tested;
     
     /***
 	Constructor without children
@@ -25,6 +26,7 @@ public class matchTreeNode {
 	parent = p;
 	children = new ArrayList<matchTreeNode>();
 	atomNumber = num;
+	tested = false;
     }
 
     /***
