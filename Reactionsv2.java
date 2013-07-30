@@ -268,9 +268,12 @@ public class Reactionsv2 {
 					ArrayList<matchTreeNode> lvl1retest = compareChildren(m1children1, m2children1);
 					//System.out.println(lvl1retest);
 					if (lvl1retest.size() == 0) {
+					    temp.tested = true;
 					    m2ChldrnMatched.add(m2scan);
+					    m2children1.add(temp);
+					    m2scan--;
 					    System.out.println("m2ChldrnMatched add up to " + m2ChldrnMatched.size());
-					    break;
+					    //break;
 					} else {
 					    temp.tested = true;
 					    m2children1.add(temp);
