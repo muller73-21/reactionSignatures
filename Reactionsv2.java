@@ -257,9 +257,10 @@ public class Reactionsv2 {
 				}				
 			    } // found children to be removed
 			    for (int m2scan = 0; m2scan < m2children1.size(); m2scan ++) {
+				System.out.println("m2scan: " + m2scan);
 				if (!m2lvl1matched.contains(m2scan)) {
 				    matchTreeNode temp = m2children1.get(m2scan);
-				    System.out.println("temp " + temp);
+				    System.out.println("temp " + temp + " " + temp.tested + " " + m2scan);
 				    //System.out.println(m1parIndex + " " + temp);
 				    if (addedNodes.contains(temp.toString()) && temp.tested == false) {
 					//System.out.println("temp in added nodes " + m1children1 + " " + m2children1);
@@ -279,11 +280,13 @@ public class Reactionsv2 {
 					    m2children1.add(temp);
 					    m2ChldrnMatched.add(m2scan);
 					    System.out.println("m2ChldrnMatched add up to " + m2ChldrnMatched.size());
-					    m2scan --;
+					    m2scan--;
 					    System.out.println("fixed " + m2children1);
 					}
 				    }
-				} 
+				} else if (m2children1.get(m2scan).tested == false) {
+				    m2ChldrnMatched.add(m2scan);
+				}
 			    }
 			} else if (m1children1.size() > m2children1.size()) {
 			    ArrayList<Integer> m2lvl1matched = new ArrayList<Integer>();
@@ -402,6 +405,8 @@ public class Reactionsv2 {
 					    System.out.println("fixed m1: " + m1children1.size() + " fixed m2: " + m2children1.size());
 					}
 				    } 
+				} else {
+				    m2ChldrnMatched.add(m2sc);
 				}
 			    }
 			  
