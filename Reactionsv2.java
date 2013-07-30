@@ -392,16 +392,18 @@ public class Reactionsv2 {
 				    m2remove = m2children1.get(m2sc);
 				    if (addedNodes.contains(m2remove.toString())) {
 					m2children1.remove(m2sc);
-					System.out.println("removed m1: " + m1children1.size() + " removed m2: " + m2children1.size());
+					System.out.println("removed " + m1remove.toString() + " m1: " + m1children1.size() + " removed " + m2remove + "  m2: " + m2children1.size());
 					ArrayList<matchTreeNode> retest = compareChildren(m1children1, m2children1);
 					if (retest.size() == 0) {
 					    m2ChldrnMatched.add(m2sc);
 					    System.out.println("m2ChldrnMatched added to");
 					    m1children1.add(m1remove);
 					    m2children1.add(m2remove);
+					    
 					} else {
-					    m1children1.add(m1remove);
+					    //m1children1.add(m1remove);
 					    m2children1.add(m2remove);
+					    m2ChldrnMatched.add(m2sc);
 					    System.out.println("fixed m1: " + m1children1.size() + " fixed m2: " + m2children1.size());
 					}
 				    } 
@@ -409,6 +411,7 @@ public class Reactionsv2 {
 				    m2ChldrnMatched.add(m2sc);
 				}
 			    }
+			    m1children1.add(m1remove);
 			  
 			}
 			System.out.println(m1parIndex + " " + m2parIndex + " " + m2ChldrnMatched.size() + " " + m2children1.size());
