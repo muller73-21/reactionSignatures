@@ -275,7 +275,67 @@ public class Reactionsv4 {
 		}
 	    }
 	} // eq test
+	System.out.println(mapping.keySet().size());
+	for (int m1atom : mapping.keySet()) {
+	    System.out.println("reactant atom " + m1atom + " maps to " + mapping.get(m1atom) + " in the product");
+	}
+
+	// match testing
+	/*for (int m1parIndex = 0; m1parIndex < m1parents.size(); m1parIndex++) {
+	    matchTreeNode reactantTest = m1parents.get(m1parIndex);
+	    ArrayList<Integer> m1bonds = reactantTest.getAtomBonds();
+	    int atomNum = reactantTest.getAtomNumber();
+	    System.out.println(reactantTest.toString() + " " + atomNum + " " + m1bonds);
+	    for (int i=0; i<m1bonds.size(); i++){
+		if (mapping.keySet().contains(m1bonds.get(i)) && !mapping.keySet().contains(atomNum)) {
+		    System.out.println("in mapping " + m1bonds.get(i));
+		    int bondedAtom = mapping.get(m1bonds.get(i));
+		    int atomNum2 = m2parents.get(bondedAtom).getAtomNumber();
+		    System.out.println("testing " + atomNum + " "+ atomNum2);
+		    ArrayList<Integer> m2bonds = m2parents.get(bondedAtom).getAtomBonds();
+		    System.out.println(m2parents.get(bondedAtom).toString() + " =  " + bondedAtom + " " + atomNum2 + " " + m2bonds );
+		    if (m2bonds.contains(atomNum - 1)) {
+			System.out.println("surround match test results in:  " + atomNum + " " + atomNum2);
+			mapping.put(atomNum, atomNum2);
+			m2eqMatch.add(atomNum2);
+			m1eqMatch.add(atomNum);
+		    }
+		}
+	    }
+	}
+	for (int m1atom : mapping.keySet()) {
+	    System.out.println("reactant atom " + m1atom + " maps to " + mapping.get(m1atom) + " in the product");
+	}
+	for (int m1parIndex = 0; m1parIndex < m1parents.size(); m1parIndex++) {
+	    matchTreeNode reactantTest = m1parents.get(m1parIndex);
+	    ArrayList<Integer> m1bonds = reactantTest.getAtomBonds();
+	    int atomNum = reactantTest.getAtomNumber();
+	    System.out.println(reactantTest.toString() + " " + atomNum + " " + m1bonds);
+	    for (int i=0; i<m1bonds.size(); i++){
+		//System.out.println("second test: " + m1bonds.get(i));
+		//System.out.println(mapping.keySet().contains(m1bonds.get(i)));
+		if (mapping.keySet().contains(m1bonds.get(i)) && !mapping.keySet().contains(atomNum)) {
+		    System.out.println("in mapping " + m1bonds.get(i));
+		    int bondedAtom = mapping.get(m1bonds.get(i));
+		    int atomNum2 = m2parents.get(bondedAtom).getAtomNumber();
+		    ArrayList<Integer> m2bonds = m2parents.get(bondedAtom).getAtomBonds();
+		    System.out.println("testing " + atomNum + " "+ atomNum2);
+		    System.out.println(m2parents.get(bondedAtom).toString() + " =  " + bondedAtom + " " + atomNum2 + " " + m2bonds );
+		    if (m2bonds.contains(atomNum)) {
+			System.out.println("surround match test results in:  " + atomNum + " " + atomNum2);
+			mapping.put(atomNum, atomNum2);
+			m2eqMatch.add(atomNum2);
+			m1eqMatch.add(atomNum);
+		    }
+		}
+	    }
+	}*/
 	
+	System.out.println("Start removal testing");
+	if (addedNodes.size() == 0 && rmvedNodes.size() == 0) {
+	    //addedNodes.add("C1");
+	    //rmvedNodes.add("C1");
+	}
 	// compare with removal
 	for (int m1parIndex = 0; m1parIndex < m1parents.size(); m1parIndex++) {
 	    matchTreeNode m1curr = m1parents.get(m1parIndex);
@@ -336,7 +396,7 @@ public class Reactionsv4 {
 				    if (addedNodes.contains(temp.toString()) && temp.tested == false) {
 					//System.out.println("temp in added nodes " + m1children1 + " " + m2children1);
 					m2children1.remove(m2scan);
-					//System.out.println(m1parIndex + " " + m2parIndex + " removed " + temp + " from m2children1 " + m2children1);
+					//	System.out.println(m1parIndex + " " + m2parIndex + " removed " + temp + " from m2children1 " + m2children1);
 					ArrayList<matchTreeNode> lvl1retest = compareChildren(m1children1, m2children1);
 					//System.out.println(lvl1retest);
 					if (lvl1retest.size() == 0) {
@@ -356,6 +416,7 @@ public class Reactionsv4 {
 					}
 				    }
 				} else if (m2children1.get(m2scan).tested == false) {
+				    //System.out.println("matched " + m1parIndex + " to " + m2parIndex);
 				    m2ChldrnMatched.add(m2scan);
 				}
 			    }
@@ -423,6 +484,7 @@ public class Reactionsv4 {
 				 int index = m1parIndex + 1;
 				 int ind = m2parIndex + 1;
 				 mapping.put(index, ind);
+				 //System.out.println("matched!! " + index + " " + ind);
 				 m2visited.add(m2parIndex);
 			    }
 			    for (matchTreeNode m : m1testRmved) {
@@ -469,7 +531,7 @@ public class Reactionsv4 {
 				    }
 				}
 			    } // matched children that can be matched
-			    //System.out.println("m1: " + m1children1.size() + " m2: " + m2children1.size());
+			    //  System.out.println("m1: " + m1children1.size() + " m2: " + m2children1.size());
 			    matchTreeNode m1remove = null;
 			    matchTreeNode m2remove = null;
 			    for (int m1sc = 0; m1sc < m1children1.size(); m1sc++) {
@@ -479,7 +541,7 @@ public class Reactionsv4 {
 				    // System.out.println(rmvedNodes.contains(m1remove.toString()));
 				    if (rmvedNodes.contains(m1remove.toString())) {
 					m1children1.remove(m1remove);
-					//System.out.println(" removed m1: " + m1children1.size() + " m2: " + m2children1.size());
+					//	System.out.println(" removed m1: " + m1children1.size() + " m2: " + m2children1.size());
 				    }
 				}
 			    }
@@ -513,7 +575,7 @@ public class Reactionsv4 {
 			}
 			//System.out.println(m1parIndex + " " + m2parIndex + " " + m2ChldrnMatched.size() + " " + m2children1.size());
 			if (m2ChldrnMatched.size() == m2children1.size()) {
-			    //System.out.println("match!!!");
+			    //System.out.println("match!!!" + m1parIndex + " " + m2parIndex);
 			    int index = m1parIndex + 1;
 			    int ind = m2parIndex + 1;
 			    mapping.put(index, ind);
@@ -673,10 +735,12 @@ public class Reactionsv4 {
 			    
 			} if (treematch == true) {
 			    mapping.put(index, ind);
+			    //System.out.println(index + " " + ind);
 			    m2visited.add(m2parIndex);
 			    break;
 			} else {
 			    mapping.put(index, ind);
+			    //System.out.println(index + " " + ind);
 			    m2visited.add(m2parIndex);
 			    break;
 			}
@@ -684,7 +748,31 @@ public class Reactionsv4 {
 		}
 	    }
 	}
-	
+	/*for (int m1parIndex = 0; m1parIndex < m1parents.size(); m1parIndex++) {
+	    matchTreeNode reactantTest = m1parents.get(m1parIndex);
+	    ArrayList<Integer> m1bonds = reactantTest.getAtomBonds();
+	    int atomNum = reactantTest.getAtomNumber();
+	    System.out.println(reactantTest.toString() + " " + atomNum + " " + m1bonds);
+	    for (int i=0; i<m1bonds.size(); i++){
+		//System.out.println("second test: " + m1bonds.get(i));
+		//System.out.println(mapping.keySet().contains(m1bonds.get(i)));
+		if (mapping.keySet().contains(m1bonds.get(i)) && !mapping.keySet().contains(atomNum)) {
+		    System.out.println("in mapping " + m1bonds.get(i));
+		    int bondedAtom = mapping.get(m1bonds.get(i));
+		    int atomNum2 = m2parents.get(bondedAtom).getAtomNumber();
+		    ArrayList<Integer> m2bonds = m2parents.get(bondedAtom).getAtomBonds();
+		    System.out.println("testing " + atomNum + " "+ atomNum2);
+		    System.out.println(m2parents.get(bondedAtom).toString() + " =  " + bondedAtom + " " + atomNum2 + " " + m2bonds );
+		    int firstTest = m1bonds.get(i);
+		    if (m2bonds.contains(mapping.get(firstTest))) {
+			System.out.println("surround match test results in:  " + atomNum + " " + atomNum2);
+			mapping.put(atomNum, atomNum2);
+			m2eqMatch.add(atomNum2);
+			m1eqMatch.add(atomNum);
+		    }
+		}
+	    }
+	    }*/
     	System.out.println(mapping.keySet().size());
 	for (int m1atom : mapping.keySet()) {
 	    System.out.println("reactant atom " + m1atom + " maps to " + mapping.get(m1atom) + " in the product");
@@ -698,7 +786,7 @@ public class Reactionsv4 {
 	ArrayList<matchTreeNode> unMatchedNodes = new ArrayList<matchTreeNode>();
 	ArrayList<Integer> m2visited = new ArrayList<Integer>();
 	if (m1.size() != m2.size()) {
-	    unMatchedNodes.add(new matchTreeNode("z",4,null,0));
+	    unMatchedNodes.add(new matchTreeNode("z",4,null,0, new ArrayList<String>()));
 	    return unMatchedNodes;
 	}
 	for (int i=0; i<m1.size(); i++) {

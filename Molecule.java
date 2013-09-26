@@ -210,13 +210,13 @@ public class Molecule {
     }
     
     public void buildMatchTrees() {
-	matchTreeNode atom = new matchTreeNode(atoms.get(0), 0, null, 1);
+	matchTreeNode atom = new matchTreeNode(atoms.get(0), 0, null, 1, this.bonds);
 	ArrayList<matchTreeNode> parentNodes = new ArrayList<matchTreeNode>();
-
+	
 	for (int i = 0; i<atoms.size(); i++) {
 	    matchTrees.add(new ArrayList<String>());
 	    int currentAtom = i+1;
-	    atom = new matchTreeNode(atoms.get(i), 0, null, i+1);
+	    atom = new matchTreeNode(atoms.get(i), 0, null, i+1, this.bonds);
 	    parentNodes.add(atom);
 	    for (String bond : bonds) {
 		Scanner sc = new Scanner(bond);
@@ -279,9 +279,9 @@ public class Molecule {
 	    int bondtype = Integer.parseInt(sc.next());
 	    //System.out.println(atoms.get(atom1-1) + " " + atoms.get(atom2-1));
 	    if (atom1 == currentAtom && atom2 != parentAtom) {
-		atom.addChild(new matchTreeNode(atoms.get(atom2 - 1), bondtype, atom, atom2));
+		atom.addChild(new matchTreeNode(atoms.get(atom2 - 1), bondtype, atom, atom2, this.bonds));
 	    } else if (atom2 == currentAtom && atom1 != parentAtom) {
-		atom.addChild(new matchTreeNode(atoms.get(atom1 - 1), bondtype, atom, atom1));
+		atom.addChild(new matchTreeNode(atoms.get(atom1 - 1), bondtype, atom, atom1, this.bonds));
 	    }
 	    
 	}

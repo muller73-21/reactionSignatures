@@ -12,6 +12,8 @@ public class matchTreeNode {
     private matchTreeNode parent;
     private int atomNumber;
     public boolean tested;
+    private ArrayList<String> moleculeBonds;
+    private ArrayList<Integer> atomBonds = new ArrayList<Integer>();
     
     /***
 	Constructor without children
@@ -20,13 +22,15 @@ public class matchTreeNode {
 	@param p node which is the parent of this node in the tree
 	@param num the number of the atom in the mol file
      */
-    public matchTreeNode(String s, int i, matchTreeNode p, int num) {
+    public matchTreeNode(String s, int i, matchTreeNode p, int num, ArrayList<String> mBonds) {
 	atomSym = s;
 	bondType = i;
 	parent = p;
 	children = new ArrayList<matchTreeNode>();
 	atomNumber = num;
 	tested = false;
+	moleculeBonds = mBonds;
+	createAtomBonds();
     }
 
     /***
@@ -37,12 +41,14 @@ public class matchTreeNode {
 	@param list current children to be the children of the node being created.
 	@param num number of atom in the mol file.
      */
-    public matchTreeNode(String s, int i, matchTreeNode p, ArrayList<matchTreeNode> list, int num) {
+    public matchTreeNode(String s, int i, matchTreeNode p, ArrayList<matchTreeNode> list, int num, ArrayList<String> mBonds) {
 	atomSym = s;
 	bondType = i;
 	parent = p;
 	children = list;
 	atomNumber = num;
+	moleculeBonds = mBonds;
+	createAtomBonds();
     }
 
     /***
@@ -134,6 +140,23 @@ public class matchTreeNode {
 	@param bond type of bond, single, double, etc.
      */
     public void addChild(String atom, int bond, int atomNum) {
-	children.add(new matchTreeNode(atom, bond, this, atomNum));
+	children.add(new matchTreeNode(atom, bond, this, atomNum, this.moleculeBonds));
+    }
+    
+    public void createAtomBonds(){
+	for (int i = 0; i<moleculeBonds.size(); i++){
+	    String bond = moleculeBonds.get(i);
+	    Scanner bondsc = new Scanner(bond);
+	    int atom1 = Integer.parseInt(bondsc.next());
+	    int atom2 = Integer.parseInt(bondsc.next());
+	    if (atom1 == atomNumber)
+		atomBonds.add(atom2);
+	    if (atom2 == atomNumber)
+		atomBonds.add(atom1);
+	}
+    }
+
+    public ArrayList<Integer> getAtomBonds () {
+	return atomBonds;
     }
 }
