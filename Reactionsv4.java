@@ -175,11 +175,13 @@ public class Reactionsv4 {
 	    String bondedAtom = bondsc.next();	   
 	    if (bondtype.equals("-")) {
 		addedNodes.add(bondedAtom + "1");
-		addedNodes.add(parentAtom + "1");
+		addedNodes.add(parentAtom + "1"); // new
 	    } else if (bondtype.equals("=")) {
 		addedNodes.add(bondedAtom + "2");
+		addedNodes.add(parentAtom + "2"); // new
 	    } else {
 		addedNodes.add(bondedAtom + "3");
+		addedNodes.add(parentAtom + "3"); // new
 	    }
 	} // close add for loop
 	for (String lose : changedBonds.get("-")) {
@@ -190,10 +192,13 @@ public class Reactionsv4 {
 	    String bondedAtom = bondsc.next();	    
 	    if (bondtype.equals("-")) {
 	        rmvedNodes.add(bondedAtom + "1");
+		rmvedNodes.add(parentAtom + "1"); // new 
 	    } else if (bondtype.equals("=")) {
 		rmvedNodes.add(bondedAtom + "2");
+		rmvedNodes.add(parentAtom + "2"); // new
 	    } else {
 		rmvedNodes.add(bondedAtom + "3");
+		rmvedNodes.add(parentAtom + "3"); // new
 	    }
 	} // close lose for loop
 	System.out.println("Added Nodes: " + addedNodes);
@@ -329,8 +334,8 @@ public class Reactionsv4 {
 		    }
 		}
 	    }
-	}*/
-	
+	}
+	*/
 	System.out.println("Start removal testing");
 	if (addedNodes.size() == 0 && rmvedNodes.size() == 0) {
 	    //addedNodes.add("C1");
@@ -339,6 +344,7 @@ public class Reactionsv4 {
 	// compare with removal
 	for (int m1parIndex = 0; m1parIndex < m1parents.size(); m1parIndex++) {
 	    matchTreeNode m1curr = m1parents.get(m1parIndex);
+	    m2loop:
 	    for (int m2parIndex = 0; m2parIndex < m2parents.size(); m2parIndex++) {
 		matchTreeNode m2curr = m2parents.get(m2parIndex);
 		if (m1curr.toString().equals(m2curr.toString()) && !m2visited.contains(m2parIndex) && !m2eqMatch.contains(m2parIndex) && !m1eqMatch.contains(m1parIndex)) {
@@ -486,6 +492,7 @@ public class Reactionsv4 {
 				 mapping.put(index, ind);
 				 //System.out.println("matched!! " + index + " " + ind);
 				 m2visited.add(m2parIndex);
+				 
 			    }
 			    for (matchTreeNode m : m1testRmved) {
 				m1children1.add(m);
@@ -494,7 +501,7 @@ public class Reactionsv4 {
 				m2children1.add(m);
 			    }
 			    if (m2visited.contains(m2parIndex)) {
-				break;
+				break m2loop;
 			    }
 			} else if (m1children1.size() == m2children1.size()){
 			    ArrayList<Integer> m1lvl2matched = new ArrayList<Integer>();
@@ -580,7 +587,7 @@ public class Reactionsv4 {
 			    int ind = m2parIndex + 1;
 			    mapping.put(index, ind);
 			    m2visited.add(m2parIndex);
-			    break;
+			    break m2loop; // new
 			}
 			
 		    } else {
@@ -737,12 +744,12 @@ public class Reactionsv4 {
 			    mapping.put(index, ind);
 			    //System.out.println(index + " " + ind);
 			    m2visited.add(m2parIndex);
-			    break;
+			    break m2loop;
 			} else {
 			    mapping.put(index, ind);
 			    //System.out.println(index + " " + ind);
 			    m2visited.add(m2parIndex);
-			    break;
+			    break m2loop;
 			}
 		    }
 		}
