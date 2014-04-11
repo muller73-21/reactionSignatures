@@ -1046,14 +1046,7 @@ public class Reactionsv7 {
 		    for (int j = 0; j < atomNums.size(); j++) {
 			System.out.println("Atom "+i+" with index "+j+" AtomNum " + lowestAtomNum2 + " " + atomNums.get(j));
 			if (atomNums.get(j) < lowestAtomNum2){
-			    lowestAtomNum2 = atomNums.get(j);
-			    indexOfLowestNum2 = j;
-			    lowestAtomNum2 = atomNums.get(j);
-			}
-		    }
-		    startIndexInReactAtomBonds = i;
-		    startAtom = "" + rmvedBonds.get(indexOfLowestNum2).charAt(0);
-		    lowestNum = lowestAtomNum2;
+;
 		} else {
 		    ArrayList<Integer> atomNums = new ArrayList<Integer>();
 		    for (String s : rmvedBonds) {

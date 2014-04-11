@@ -4,7 +4,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Reactionsv7 {
+public class Reactionsv7B {
     /***
 	Molecule representing mol file of all reactants for reaction
     */
@@ -17,7 +17,7 @@ public class Reactionsv7 {
 	Main method creating reaction and running matching algorithm / signature creation algorithm
     */
     public static void main(String[] args) throws FileNotFoundException {
-	Reactionsv7 reactions = new Reactionsv7();
+	Reactionsv7B reactions = new Reactionsv7B();
 	// create reaction by scanning mol file for data to make reactant and product Molecule objects.
 	reactions.createReaction(args);
 	Molecule reactant = reactions.reactants;
