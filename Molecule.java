@@ -14,6 +14,7 @@ public class Molecule {
     private ArrayList<String> bonds = new ArrayList<String>();
     private int[] atomBondFreqs;
     private int numOfMolecules;
+    private ArrayList<String> charges = new ArrayList<String>();
     private HashMap<String, Integer> bondTypes = new HashMap<String, Integer>();
     private ArrayList<ArrayList<String>> matchTrees = new ArrayList<ArrayList<String>>();
     private ArrayList<matchTreeNode> atomTrees = new ArrayList<matchTreeNode>();
@@ -30,12 +31,13 @@ public class Molecule {
 	and y are number of the atom in the list of atoms (1 indexed) and z is the type of bond. x,y,z are integers.
     */
     public Molecule(ArrayList<String> atms, int bonds, int numAtms, 
-		    ArrayList<String> bnds) {
+		    ArrayList<String> bnds, ArrayList<String> chrgs) {
 	atoms = atms;
 	numberOfBonds = bonds;
         numberOfAtoms = numAtms;
 	this.bonds = bnds;
 	atomBondFreqs = new int[numberOfAtoms];
+	charges = chrgs;
     }
     /***
 	Method populates the freq array with the number of bonds each atom has. Does this by
@@ -81,7 +83,7 @@ public class Molecule {
 	Gets the List of bonds of the molecule
 	@return List of bonds in the molecule of format "x y z".
      */
-    public List<String> getBonds() {
+    public ArrayList<String> getBonds() {
 	return bonds;
     }
     /***
@@ -130,7 +132,7 @@ public class Molecule {
 	Return List of Atoms in Molecule
 	@return List of Atoms in Molecule Object.
      */
-    public List<String> getAtoms() {
+    public ArrayList<String> getAtoms() {
 	return atoms;
     }
     /***
